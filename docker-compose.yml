@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  go-app:
+    image: ${DOCKER_REGISTRY-}go-app
+    build:
+      context: src/go
+      dockerfile: Dockerfile
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    restart: always
+    ports:
+      - "8080:8080"
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_DATABASE: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./docker/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
