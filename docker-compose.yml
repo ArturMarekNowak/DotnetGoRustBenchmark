@@ -1,14 +1,26 @@
 version: '3.7'
 
 services:
+  dotnet-app:
+    image: ${DOCKER_REGISTRY-}webapp
+    build:
+      context: src/dotnet
+      dockerfile: Dockerfile
+    depends_on:
+      - mongodb
+    restart: always
+    ports:
+      - "8081:8080"
+  
   go-app:
     image: ${DOCKER_REGISTRY-}go-app
     build:
       context: src/go
       dockerfile: Dockerfile
     depends_on:
-      mongodb:
-        condition: service_healthy
+      - mongodb
+    environment:
+      CONNECTION_STRING: mongodb://admin:admin@host.docker.internal:27017/?directConnection=true
     restart: always
     ports:
       - "8080:8080"

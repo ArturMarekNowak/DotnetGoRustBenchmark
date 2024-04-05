@@ -1,5 +1,6 @@
 ﻿using App.Models;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace App.Repositories;
@@ -17,6 +18,8 @@ public sealed class UsersRepository
     
     public async Task<User?> GetUser(int id, CancellationToken cancellationToken)
     {
+        var users = await _usersCollection.Find(_ => true).ToListAsync();
+        
         var user = await _usersCollection
             .Find(u => u.Id == id)
             .FirstOrDefaultAsync(cancellationToken: cancellationToken);

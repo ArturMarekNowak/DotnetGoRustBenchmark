@@ -16,7 +16,7 @@ func GetUser(id int) (*models.User, error) {
 	var client = CreateSession()
 	coll := client.Database("mongo").Collection("users")
 	var user models.User
-	err := coll.FindOne(context.TODO(), bson.D{{"id", id}}).Decode(&user)
+	err := coll.FindOne(context.TODO(), bson.D{{"_id", id}}).Decode(&user)
 	if errors.Is(err, mongo.ErrNoDocuments) {
 		return nil, err
 	}
@@ -24,6 +24,11 @@ func GetUser(id int) (*models.User, error) {
 		panic(err)
 	}
 
+	if err := client.Disconnect(context.TODO()); err != nil {
+		panic(err)
+	}
+
+	user.Id = id
 	return &user, nil
 }
 
@@ -36,11 +41,6 @@ func CreateSession() *mongo.Client {
 	if err != nil {
 		panic(err)
 	}
-	defer func() {
-		if err := client.Disconnect(context.TODO()); err != nil {
-			panic(err)
-		}
-	}()
 
 	return client
 }
