@@ -1,8 +1,19 @@
 version: '3.7'
 
 services:
+  rust-app:
+    image: ${DOCKER_REGISTRY-}rust-app
+    build:
+      context: src/rust
+      dockerfile: Dockerfile
+    depends_on:
+      - mongodb
+    restart: always
+    ports:
+      - "8082:8080"
+  
   dotnet-app:
-    image: ${DOCKER_REGISTRY-}webapp
+    image: ${DOCKER_REGISTRY-}dotnet-app
     build:
       context: src/dotnet
       dockerfile: Dockerfile
