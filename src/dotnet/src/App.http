@@ -1,0 +1,11 @@
+@App_HostAddress = http://localhost:5103
+
+GET {{App_HostAddress}}/helloWorld
+Accept: application/json
+
+###
+
+GET {{App_HostAddress}}/users/1
+Accept: application/json
+
+###
