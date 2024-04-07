@@ -11,6 +11,14 @@ services:
     restart: always
     ports:
       - "8082:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
   
   dotnet-app:
     image: ${DOCKER_REGISTRY-}dotnet-app
@@ -22,6 +30,14 @@ services:
     restart: always
     ports:
       - "8081:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
   
   go-app:
     image: ${DOCKER_REGISTRY-}go-app
@@ -35,6 +51,14 @@ services:
     restart: always
     ports:
       - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
 
   mongodb:
     image: mongo:latest
